@@ -1,5 +1,5 @@
-@(user: User, allDrugs: List[Drug], missingDrugs: List[Drug])
-
+@(user: User, allDrugs: List[Drug], missingDrugs: List[Drug], searchForm: Form[Drug])
+@import helper._
 @main("Pharmacy | Home") {
 	
 	<h1>Pharmacy</h1>
@@ -9,37 +9,68 @@
 	</p>
     
 	<h1>Drugs</h1>
+	@if(flash.contains("success")) {
+		<p class="success">
+			@flash.get("success")
+		</p>
+	}
+	
+	@if(flash.contains("error")) {
+		<p class="error">
+			@flash.get("error")
+		</p>
+	}
+	
     <p><a href="@routes.Drugs.newDrug()">Add new drug</a></p>
+    <p><a href="@routes.Application.orderMissingDrugs()">Order missing drugs</a></p>
+    
+    <p>Search</p>
+    <form method="POST" action="@routes.Drugs.search()" >
+        <input type="text" name="key" />
+        <input type="submit" value="Log in" />
+    </form>
     
     <h2>All drugs</h2>
-	<ol>
-		@for(drug <- allDrugs) {
-			<li>
-				<a href="@routes.Drugs.show(drug.id)"><p>Name: @drug.name</p></a>
-				<p>Id: @drug.id</p>
-				<p>Description: @drug.description</p>
-				<p>Active ingredient: @drug.activeIngredient</p>
-				<p>Price: @drug.price</p>
-				<p>Quantity: @drug.quantity</p>
-				<p>Is prescribed: @drug.isPrescribed</p>
-			</li>	
-		}
-	</ol>
+    @if(allDrugs.size() <= 0) {
+		<p>No drugs</p>
+	} else {
+		<ol>
+			@for(drug <- allDrugs) {
+				<li>
+					<a href="@routes.Drugs.show(drug.id)"><p>Name: @drug.name</p></a>
+					<p>Id: @drug.id</p>
+					<p>Description: @drug.description</p>
+					<p>Active ingredient: @drug.activeIngredient</p>
+					<p>Price: @drug.price</p>
+					<p>Quantity: @drug.quantity</p>
+					<p>Is prescribed: @drug.isPrescribed</p>
+				</li>
+				<p>
+					<a href="@routes.Drugs.delete(drug.id)">Delete</a>
+					<a href="YOLO">Edit</a>
+				</p>
+			}
+		</ol>
+	}
 	
 	<h2>Missing drugs</h2>
-	<ol>
-		@for(drug <- missingDrugs) {
-			<li>
-				<a href="@routes.Drugs.show(drug.id)"><p>Name: @drug.name</p></a>
-				<p>Id: @drug.id</p>
-				<p>Description: @drug.description</p>
-				<p>Active ingredient: @drug.activeIngredient</p>
-				<p>Price: @drug.price</p>
-				<p>Quantity: @drug.quantity</p>
-				<p>Is prescribed: @drug.isPrescribed</p>
-			</li>	
-		}
-	</ol>
+	@if(missingDrugs.size() <= 0) {
+		<p>No missing drugs</p>
+	} else {
+		<ol>
+			@for(drug <- missingDrugs) {
+				<li>
+					<a href="@routes.Drugs.show(drug.id)"><p>Name: @drug.name</p></a>
+					<p>Id: @drug.id</p>
+					<p>Description: @drug.description</p>
+					<p>Active ingredient: @drug.activeIngredient</p>
+					<p>Price: @drug.price</p>
+					<p>Quantity: @drug.quantity</p>
+					<p>Is prescribed: @drug.isPrescribed</p>
+				</li>	
+			}
+		</ol>
+	}
 	
     
 }

@@ -10,12 +10,19 @@ GET		/logout						controllers.Application.logout()
 POST	/authenticate				controllers.Application.authenticate()
 GET		/register					controllers.Application.register()
 POST	/createUser					controllers.Application.createUser()
+GET		/order						controllers.Application.orderMissingDrugs()
 
 GET		/home						controllers.Application.home()
 
-GET		/drugs/newDrug				controllers.Drugs.newDrug()
-POST	/drugs/create				controllers.Drugs.create()
+POST	/drugs/search				controllers.Drugs.search()
+
+GET		/drugs/create				controllers.Drugs.create()
+POST	/drugs/save					controllers.Drugs.save()
+GET		/drugs/:id/edit				controllers.Drugs.edit(id: Long)
+POST	/drugs/:id/update			controllers.Drugs.update(id: Long)
+GET		/drugs/:id/delete			controllers.Drugs.delete(id: Long)
 GET		/drugs/:id					controllers.Drugs.show(id: Long)
+
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

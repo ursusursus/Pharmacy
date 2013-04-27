@@ -53,8 +53,8 @@ public class Drug extends Model {
 		return find.where().le("quantity", 0).findList();
 	}
 	
-	public static Drug findByName(String name) {
-		return find.where().le("name", 0).findUnique();
+	public static List<Drug> findByName(String name) {
+		return find.where().eq("name", name).findList();
 	}
 	
 	public static void addDrug(Drug drug) {

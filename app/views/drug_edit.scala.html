@@ -1,0 +1,18 @@
+@(id: Long, drugForm: Form[Drug])
+@import helper._
+@main("Edit drug") {
+
+	<h2>Add drug</h2>
+	@form(routes.Drugs.update(id)) {
+        @inputText(drugForm("name"))
+        @textarea(drugForm("description"))
+        @select(drugForm("isPrescribed"), options("1" -> "Yes", "0" -> "No"))
+        @inputText(drugForm("quantity"), 'type -> "number")
+        @inputText(drugForm("price"))
+        @inputText(drugForm("activeIngredient"))
+        <input type="submit" value="Save changes">
+        
+    }
+    
+    
+}

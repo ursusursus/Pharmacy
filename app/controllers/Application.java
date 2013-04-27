@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.Arrays;
 import java.util.List;
 
 import models.Drug;
@@ -10,11 +11,14 @@ import play.db.ebean.Model;
 import play.libs.Crypto;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.Role;
+import utils.Security;
 import views.html.*;
 
 public class Application extends Controller {
 
 	static Form<User> userForm = Form.form(User.class);
+	static Form<Drug> drugForm = Form.form(Drug.class);
 
 	public static Result index() {
 		// session().clear();
@@ -26,17 +30,16 @@ public class Application extends Controller {
 	}
 
 	public static Result logout() {
-		
 		flash("success", "You've been logged out");
 		session().clear();
 		return redirect(routes.Application.login());
 	}
+	
 
 	public static Result register() {
-		System.out.println("register");
-
 		return ok(register.render(userForm));
 	}
+	
 
 	public static Result createUser() {
 		Form<User> filledForm = userForm.bindFromRequest();
@@ -50,6 +53,7 @@ public class Application extends Controller {
 		flash("success", "Registration successful");
 		return redirect(routes.Application.home());
 	}
+	
 
 	public static Result authenticate() {
 		System.out.println("authenticate");
@@ -71,6 +75,7 @@ public class Application extends Controller {
 		session("user_role", authenticatedUser.role);
 		return redirect(routes.Application.home());
 	}
+	
 
 	public static Result home() {
 		String userId = session("user_id");
@@ -83,9 +88,29 @@ public class Application extends Controller {
 		List<Drug> allDrugs = Drug.findAll();
 		List<Drug> missingDrugs = Drug.findMissingDrugs();
 
-		return ok(home.render(loggedUser, allDrugs, missingDrugs));
+		return ok(home.render(loggedUser, allDrugs, missingDrugs, drugForm));
 	}
+	
 
+	public static Result orderMissingDrugs() {
+		// Is authenticated?
+		String userId = session("user_id");
+		if (!Security.isAuthenticated(userId)) {
+			System.out.println("You need to login first");
+			return redirect(routes.Application.login());
+		}
+
+		// Is authorized?
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
+			System.out.println("Unauthorized access");
+			return redirect(routes.Application.login());
+		}
+		
+		List<Drug> missingDrugs = Drug.findMissingDrugs();
+		
+		return ok(order.render(missingDrugs));
+	}
 
 	private static <T extends Model> boolean isValid(Form<T> form) {
 		if (form.hasErrors()) {

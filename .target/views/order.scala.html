@@ -1,0 +1,22 @@
+@(missingDrugs: List[Drug])
+@main("Pharmacy | Order") {
+
+	<h1>Pharmacy</h1>
+	<h2>Order</h2>
+	
+	@if(missingDrugs.size() <= 0) {
+		<p>No missing drugs to order :)</p>
+	} else {
+		<h2>Sending order for these drugs</h2>
+		<ol>
+			@for(drug <- missingDrugs) {
+				<li>
+					<p>Name: @drug.name</p>
+					<p>Description: @drug.description</p>
+				</li>
+			}
+		</ol>
+	}
+    
+    
+}
