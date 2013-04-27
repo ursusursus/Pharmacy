@@ -1,0 +1,22 @@
+@(userForm: Form[User])
+@import helper._
+@main("Pharmacy | Register") {
+
+	<h2>Register</h2>
+	
+	@if(flash.size() > 0){
+      <div class="alert-alert error">
+          @for((key, value) <- flash){
+              <strong>Error : </strong> @value<br />
+          }
+      </div> 
+  }
+	@form(routes.Application.createUser()) {
+		@inputText(userForm("email"), 'type -> "email	")
+        @inputText(userForm("name")) 
+        @select(userForm("role"), options("admin" -> "Admin", "chemist" -> "Chemist", "doctor" -> "Doctor", "warehouseman" -> "Warehouseman"))
+        @inputPassword(userForm("password"))
+        <input type="submit" value="Register">
+    }    
+    
+}

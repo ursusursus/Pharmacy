@@ -1,0 +1,29 @@
+@(userForm: Form[User])
+@import helper._
+@main("Pharmacy | Login") {
+
+	<h1>Pharmacy</h1>
+	<h2>Login</h2>
+	
+	@if(flash.contains("success")) {
+		<p class="success">
+			@flash.get("success")
+		</p>
+	}
+	
+	@if(flash.contains("error")) {
+		<p class="error">
+			@flash.get("error")
+		</p>
+	}
+	 
+	@form(routes.Application.authenticate()) {
+        @inputText(userForm("email"), '_label -> "E-mail") 
+        @inputPassword(userForm("password"), '_label -> "Password")
+        <input type="submit" value="Log in">
+    }
+    
+    <p>or <a href="@routes.Application.register()">register</a></p>
+    
+    
+}
