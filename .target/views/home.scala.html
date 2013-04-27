@@ -21,13 +21,13 @@
 		</p>
 	}
 	
-    <p><a href="@routes.Drugs.newDrug()">Add new drug</a></p>
+    <p><a href="@routes.Drugs.create()">Add new drug</a></p>
     <p><a href="@routes.Application.orderMissingDrugs()">Order missing drugs</a></p>
     
-    <p>Search</p>
+    <h2>Search</h2>
     <form method="POST" action="@routes.Drugs.search()" >
-        <input type="text" name="key" />
-        <input type="submit" value="Log in" />
+        <input type="text" name="key" placeholder="Enter name or ingredient" />
+        <input type="submit" value="Search" />
     </form>
     
     <h2>All drugs</h2>
@@ -47,7 +47,8 @@
 				</li>
 				<p>
 					<a href="@routes.Drugs.delete(drug.id)">Delete</a>
-					<a href="YOLO">Edit</a>
+					<a href="@routes.Drugs.edit(drug.id)">Edit</a>
+					<a href="@routes.Drugs.sell(drug.id)">Sell</a>
 				</p>
 			}
 		</ol>

@@ -6,3 +6,7 @@ select id, hash, apply_script, revert_script, state, last_problem from play_evol
 org.h2.jdbc.JdbcSQLException: Hodnota je príliš dlhá pre stĺpec "DESCRIPTION VARCHAR(255)": "STRINGDECODE('Lorem Ipsum je fikt\u00edvny text, pou\u017e\u00edvan\u00fd pri n\u00e1vrhu tla\u010dov\u00edn a typografie. Lorem... (309)"
 Value too long for column "DESCRIPTION VARCHAR(255)": "STRINGDECODE('Lorem Ipsum je fikt\u00edvny text, pou\u017e\u00edvan\u00fd pri n\u00e1vrhu tla\u010dov\u00edn a typografie. Lorem... (309)"; SQL statement:
 insert into drug (id, name, quantity, price, description, active_ingredient, is_prescribed, user_id) values (?,?,?,?,?,?,?,?) [22001-168]
+04-27 20:30:13 jdbc[9]: exception
+org.h2.jdbc.JdbcSQLException: Hodnota je príliš dlhá pre stĺpec "DESCRIPTION VARCHAR(255)": "STRINGDECODE('Liek Ibalgin 400 sa u\u017e\u00edva pri miernej a\u017e strednej bolesti, napr. pri bolesti hlavy, zubov, chrbta, ... (616)"
+Value too long for column "DESCRIPTION VARCHAR(255)": "STRINGDECODE('Liek Ibalgin 400 sa u\u017e\u00edva pri miernej a\u017e strednej bolesti, napr. pri bolesti hlavy, zubov, chrbta, ... (616)"; SQL statement:
+insert into drug (id, name, quantity, price, description, active_ingredient, is_prescribed, user_id) values (?,?,?,?,?,?,?,?) [22001-168]

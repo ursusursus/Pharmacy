@@ -21,8 +21,12 @@ public class Drugs extends Controller {
 
 	public static Result show(Long id) {
 		String userId = session("user_id");
-		if (userId == null) {
-			System.out.println("You need to login first");
+		if (!Security.isAuthenticated(userId)) {
+			return redirect(routes.Application.login());
+		}
+		
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
 			return redirect(routes.Application.login());
 		}
 
@@ -36,20 +40,16 @@ public class Drugs extends Controller {
 	 * @return
 	 */
 	public static Result create() {
-
-		// Is authenticated?
 		String userId = session("user_id");
 		if (!Security.isAuthenticated(userId)) {
-			System.out.println("You need to login first");
+			return redirect(routes.Application.login());
+		}
+		
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
 			return redirect(routes.Application.login());
 		}
 
-		// Is authorized?
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			System.out.println("Unauthorized access");
-			return redirect(routes.Application.login());
-		}
 
 		// Serve form
 		return ok(drug_create.render(drugForm));
@@ -61,88 +61,157 @@ public class Drugs extends Controller {
 	 * @return
 	 */
 	public static Result save() {
-
-		// Is authenticated?
 		String userId = session("user_id");
 		if (!Security.isAuthenticated(userId)) {
-			System.out.println("You need to login first");
 			return redirect(routes.Application.login());
 		}
-
-		// Is authorized?
+		
 		String userRole = session("user_role");
 		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			System.out.println("Unauthorized access");
 			return redirect(routes.Application.login());
 		}
 
-		// Is form valid?
 		Form<Drug> filledForm = drugForm.bindFromRequest();
-		if (!isValid(filledForm)) {
-			return redirect(routes.Drugs.create());
-		}
+		// filledForm.hasErrors();
 
 		// Add new drug
 		Drug drug = filledForm.get();
 		drug.user = User.findById(Long.parseLong(userId));
 		Drug.addDrug(drug);
-		flash("success", "Drug " + drug.name + " created successfully");
 
+		flash("success", "Drug " + drug.name + " created successfully");
 		return redirect(routes.Application.home());
 
 	}
-	
-	public static Result edit(Long id) {
-		drugForm.fill(Drug.findById(id));
-		return ok(drug_edit.render(id, drugForm));
-	}
-	
-	public static Result update(Long id) {
-		Form<Drug> filledForm = drugForm.bindFromRequest();
-        if(filledForm.hasErrors()) {
-            // return badRequest(editForm.render(id, computerForm));
-        }
-        Drug drug = filledForm.get();
-        drug.update(id);
-        
-        flash("success", "Drug " + drug.name + " has been updated");
-        return redirect(routes.Application.home());
-    }
 
-	public static Result delete(Long id) {
-		// Is authenticated?
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Result edit(Long id) {
 		String userId = session("user_id");
 		if (!Security.isAuthenticated(userId)) {
-			System.out.println("You need to login first");
+			return redirect(routes.Application.login());
+		}
+		
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
 			return redirect(routes.Application.login());
 		}
 
-		// Is authorized?
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			System.out.println("Unauthorized access");
+		// Form je immutable takze preto v paramsi alebo robit novy objekt
+		return ok(drug_edit.render(id, drugForm.fill(Drug.findById(id))));
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Result update(Long id) {
+		String userId = session("user_id");
+		if (!Security.isAuthenticated(userId)) {
 			return redirect(routes.Application.login());
 		}
 		
-		Drug drug = Drug.findById(id);
-		drug.delete();
-		flash("success", "Drug " + drug.name + " deleted successfully");
-		
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
+			return redirect(routes.Application.login());
+		}
+
+
+		Form<Drug> filledForm = drugForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			// return badRequest(editForm.render(id, computerForm));
+		}
+
+		// Update
+		Drug drug = filledForm.get();
+		Drug.updateDrug(drug, id);
+
+		flash("success", "Drug " + drug.name + " has been updated");
 		return redirect(routes.Application.home());
 	}
-	
-	
-	
-	
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Result delete(Long id) {
+		String userId = session("user_id");
+		if (!Security.isAuthenticated(userId)) {
+			return redirect(routes.Application.login());
+		}
+		
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
+			return redirect(routes.Application.login());
+		}
+
+
+		// Delete
+		Drug drug = Drug.findById(id);
+		Drug.deleteDrug(drug);
+
+		flash("success", "Drug " + drug.name + " deleted successfully");
+		return redirect(routes.Application.home());
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
 	public static Result search() {
+		String userId = session("user_id");
+		if (!Security.isAuthenticated(userId)) {
+			return redirect(routes.Application.login());
+		}
+		
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
+			return redirect(routes.Application.login());
+		}
+
+
 		String key = form().bindFromRequest().get("key");
 		List<Drug> drugsByName = Drug.findByName(key);
 		List<Drug> drugsByActiveIngredient = Drug.findByActiveIngredient(key);
-		
+
 		return ok(search.render(drugsByName, drugsByActiveIngredient));
 	}
-	
 
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public static Result sell(Long id) {
+		String userId = session("user_id");
+		if (!Security.isAuthenticated(userId)) {
+			return redirect(routes.Application.login());
+		}
+		
+		String userRole = session("user_role");
+		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
+			return redirect(routes.Application.login());
+		}
+
+
+		Drug drug = Drug.findById(id);
+		Drug.sellDrug(drug);
+
+		flash("success", "Drug " + drug.name + " sold successfully");
+		return redirect(routes.Application.home());
+	}
+
+
+	/**
+	 * 
+	 * @param form
+	 * @return
+	 */
 	private static <T extends Model> boolean isValid(Form<T> form) {
 		if (form.hasErrors()) {
 			for (String key : form.errors().keySet()) {

@@ -9,6 +9,10 @@ public class Security {
 	}
 	
 	public static boolean isAuthorized(List<String> authorizedRoles, String userRole) {
+		if(userRole == null) {
+			return false;
+		}
+		
 		for (String authorizedRole : authorizedRoles) {
 			if(userRole.equals(authorizedRole)) {
 				return true;

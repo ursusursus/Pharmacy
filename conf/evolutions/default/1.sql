@@ -14,7 +14,7 @@ create table drug (
   name                      varchar(255),
   quantity                  integer,
   price                     varchar(255),
-  description               varchar(255),
+  description               LONGTEXT,
   active_ingredient         varchar(255),
   is_prescribed             integer,
   user_id                   bigint,

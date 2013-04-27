@@ -21,6 +21,7 @@ POST	/drugs/save					controllers.Drugs.save()
 GET		/drugs/:id/edit				controllers.Drugs.edit(id: Long)
 POST	/drugs/:id/update			controllers.Drugs.update(id: Long)
 GET		/drugs/:id/delete			controllers.Drugs.delete(id: Long)
+GET		/drugs/:id/sell				controllers.Drugs.sell(id: Long)
 GET		/drugs/:id					controllers.Drugs.show(id: Long)
 
 

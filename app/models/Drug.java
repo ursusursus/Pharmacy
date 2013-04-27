@@ -2,6 +2,7 @@ package models;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -24,7 +25,7 @@ public class Drug extends Model {
 	@Required
 	public String price;
 	
-	@Required
+	@Column(columnDefinition="LONGTEXT")
 	public String description;
 	
 	@Required
@@ -46,7 +47,7 @@ public class Drug extends Model {
 	}
 	
 	public static List<Drug> findByActiveIngredient(String activeIngredient) {
-		return find.where().eq("activeIngredient", activeIngredient).findList();
+		return find.where().icontains("activeIngredient", activeIngredient).findList();
 	}
 	
 	public static List<Drug> findMissingDrugs() {
@@ -54,19 +55,15 @@ public class Drug extends Model {
 	}
 	
 	public static List<Drug> findByName(String name) {
-		return find.where().eq("name", name).findList();
+		return find.where().icontains("name", name).findList(); 
 	}
 	
 	public static void addDrug(Drug drug) {
 		drug.save();
 	}
 	
-	public static void addNewDrugs() {
-		
-	}
-	
-	public static void editDrug(Drug drug) {
-		
+	public static void updateDrug(Drug drug, Long id) {
+		drug.update(id);
 	}
 	
 	public static void deleteDrug(Drug drug) {
@@ -74,7 +71,10 @@ public class Drug extends Model {
 	}
 	
 	public static void sellDrug(Drug drug) {
-		
+		if(drug.quantity > 0) {
+			drug.quantity--;
+			drug.update();
+		}
 	}
 	
 

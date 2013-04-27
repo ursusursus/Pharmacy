@@ -1,0 +1,18 @@
+@(taskForm: Form[Drug])
+@import helper._
+@main("Add new drug") {
+
+	<h2>Add drug</h2>
+	@form(routes.Drugs.save()) {
+        @inputText(taskForm("name"))
+        @textarea(taskForm("description"))
+        @select(taskForm("isPrescribed"), options("1" -> "Yes", "0" -> "No"))
+        @inputText(taskForm("quantity"), 'type -> "number")
+        @inputText(taskForm("price"))
+        @inputText(taskForm("activeIngredient"))
+        <input type="submit" value="Create">
+        
+    }
+    
+    
+}
