@@ -2,7 +2,16 @@
 @import helper._
 @main("Pharmacy | Register") {
 
-	<h2>Register</h2>
+ 	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li class="active"><a href="#">Home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
 	
 	@if(flash.size() > 0){
       <div class="alert-alert error">
@@ -11,12 +20,24 @@
           }
       </div> 
   }
-	@form(routes.Application.createUser()) {
-		@inputText(userForm("email"), 'type -> "email	")
-        @inputText(userForm("name")) 
-        @select(userForm("role"), options("admin" -> "Admin", "chemist" -> "Chemist", "doctor" -> "Doctor", "warehouseman" -> "Warehouseman"))
-        @inputPassword(userForm("password"))
-        <input type="submit" value="Register">
-    }    
+	@form(routes.Application.createUser(), 'class ->"form-signin") { 
+		<h2 class="form-signin-heading">Register</h2>  
+		 
+		@inputText(userForm("email"), 'type -> "email", '_label -> "Email:", 'class ->"input-block-level", 'placeholder -> "email address")  
+        @inputText(userForm("name"), '_label -> "Name:", 'class ->"input-block-level", 'placeholder -> "name")   
+        @select(userForm("role"), options("chemist" -> "Chemist", "doctor" -> "Doctor", "warehouseman" -> "Warehouseman"), '_label->"Role:")
+        @inputPassword(userForm("password"), '_label -> "Password:", 'class ->"input-block-level", 'placeholder -> "password")  
+        <div class="form-actions">
+			<button class="btn btn-large btn-warning" type="submit">Register</button>
+			 
+		</div> 
+    }        
+	<hr>
+		
+	<div class="footer">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>
+		    
     
 }
+

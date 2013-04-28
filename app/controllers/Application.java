@@ -19,9 +19,10 @@ public class Application extends Controller {
 
 	static Form<User> userForm = Form.form(User.class);
 	static Form<Drug> drugForm = Form.form(Drug.class);
+	static Form<Drug> orderDrugForm = Form.form(Drug.class);
 
 	public static Result index() {
-		// session().clear();
+		//session().clear();
 		return redirect(routes.Application.home());
 	}
 
@@ -78,6 +79,7 @@ public class Application extends Controller {
 	
 
 	public static Result home() {
+		//session().clear();
 		String userId = session("user_id");
 		if (userId == null) {
 			System.out.println("You need to login first");
@@ -107,9 +109,11 @@ public class Application extends Controller {
 			return redirect(routes.Application.login());
 		}
 		
-		List<Drug> missingDrugs = Drug.findMissingDrugs();
+		List<Drug> orderingDrugs = Drug.findOrderingDrugs();
+
+		User loggedUser = User.findById(Long.parseLong(userId));
 		
-		return ok(order.render(missingDrugs));
+		return ok(order.render(loggedUser,orderingDrugs));
 	}
 
 	private static <T extends Model> boolean isValid(Form<T> form) {

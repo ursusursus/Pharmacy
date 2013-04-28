@@ -2,28 +2,48 @@
 @import helper._
 @main("Pharmacy | Login") {
 
-	<h1>Pharmacy</h1>
-	<h2>Login</h2>
-	
-	@if(flash.contains("success")) {
-		<p class="success">
-			@flash.get("success")
-		</p>
-	}
-	
-	@if(flash.contains("error")) {
-		<p class="error">
-			@flash.get("error")
-		</p>
-	}
-	 
-	@form(routes.Application.authenticate()) {
-        @inputText(userForm("email"), '_label -> "E-mail") 
-        @inputPassword(userForm("password"), '_label -> "Password")
-        <input type="submit" value="Log in">
+
+ 	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li class="active"><a href="#">Home</a></li>
+			<li><a href="#">About</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
+
+	@form(routes.Application.authenticate(), 'class ->"form-signin") {     
+		<h2 class="form-signin-heading">Please sign in</h2>  
+       
+ 		@helper.inputText(userForm("email"), '_label -> "", 'class ->"input-block-level", 'placeholder -> "Email address")  
+        @inputPassword(userForm("password"), '_label -> "",  'class ->"input-block-level", 'placeholder -> "Password")   
+        
+        @if(flash.contains("success")) {
+			<div class="alert alert-success">
+				<strong>@flash.get("success")</strong>	
+			</div>
+		}
+		
+		@if(flash.contains("error")) {            
+			<div class="alert alert-error">
+             	<strong>@flash.get("error")</strong>			
+			</div>
+		}
+		<div class="form-actions">
+			<button class="btn btn-large btn-primary" type="submit">Sign in</button>
+			 or
+			<a class="btn btn-large btn-warning" href="@routes.Application.register()">REGISTER</a>
+		</div> 
+        
     }
-    
-    <p>or <a href="@routes.Application.register()">register</a> zmena !</p>
-    
+   	
+   	<hr>
+		
+	<div class="footer">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>
+		    
     
 }

@@ -18,6 +18,7 @@ import views.html.*;
 public class Drugs extends Controller {
 
 	static Form<Drug> drugForm = Form.form(Drug.class);
+	static Form<Drug> orderDrugForm = Form.form(Drug.class);
 
 	public static Result show(Long id) {
 		String userId = session("user_id");
@@ -25,13 +26,10 @@ public class Drugs extends Controller {
 			return redirect(routes.Application.login());
 		}
 		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			return redirect(routes.Application.login());
-		}
-
+		User loggedUser = User.findById(Long.parseLong(userId));
+		
 		Drug drug = Drug.findById(id);
-		return ok(drug_show.render(drug));
+		return ok(drug_show.render(loggedUser,drug));
 	}
 
 	/**
@@ -45,14 +43,46 @@ public class Drugs extends Controller {
 			return redirect(routes.Application.login());
 		}
 		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
+		User loggedUser = User.findById(Long.parseLong(userId));
+
+		// Serve form
+		return ok(drug_create.render(loggedUser,drugForm));
+	}
+	
+
+
+
+	public static Result order(Long id) {
+		String userId = session("user_id");
+		if (!Security.isAuthenticated(userId)) {
+			return redirect(routes.Application.login());
+		}
+
+		User loggedUser = User.findById(Long.parseLong(userId));
+
+		return ok(drug_order.render(loggedUser,id, orderDrugForm.fill(Drug.findById(id))));
+	}
+	
+	
+	public static Result makeOrder(Long id) {
+		String userId = session("user_id");
+		if (!Security.isAuthenticated(userId)) {
 			return redirect(routes.Application.login());
 		}
 
 
-		// Serve form
-		return ok(drug_create.render(drugForm));
+		Form<Drug> filledForm = orderDrugForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			// return badRequest(editForm.render(id, computerForm));
+		}
+		
+		
+		// Update
+		Drug drug = filledForm.get();
+		Drug.updateDrug(drug, id);
+
+		flash("success", "Drug " + drug.name + " has been ordered");
+		return redirect(routes.Application.home());
 	}
 
 	/**
@@ -63,11 +93,6 @@ public class Drugs extends Controller {
 	public static Result save() {
 		String userId = session("user_id");
 		if (!Security.isAuthenticated(userId)) {
-			return redirect(routes.Application.login());
-		}
-		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
 			return redirect(routes.Application.login());
 		}
 
@@ -95,13 +120,11 @@ public class Drugs extends Controller {
 			return redirect(routes.Application.login());
 		}
 		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			return redirect(routes.Application.login());
-		}
+
+		User loggedUser = User.findById(Long.parseLong(userId));
 
 		// Form je immutable takze preto v paramsi alebo robit novy objekt
-		return ok(drug_edit.render(id, drugForm.fill(Drug.findById(id))));
+		return ok(drug_edit.render(loggedUser,id, drugForm.fill(Drug.findById(id))));
 	}
 
 	/**
@@ -115,11 +138,6 @@ public class Drugs extends Controller {
 			return redirect(routes.Application.login());
 		}
 		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			return redirect(routes.Application.login());
-		}
-
 
 		Form<Drug> filledForm = drugForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -145,10 +163,6 @@ public class Drugs extends Controller {
 			return redirect(routes.Application.login());
 		}
 		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			return redirect(routes.Application.login());
-		}
 
 
 		// Delete
@@ -169,17 +183,14 @@ public class Drugs extends Controller {
 			return redirect(routes.Application.login());
 		}
 		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			return redirect(routes.Application.login());
-		}
-
 
 		String key = form().bindFromRequest().get("key");
+		User loggedUser = User.findById(Long.parseLong(userId));
+		
 		List<Drug> drugsByName = Drug.findByName(key);
 		List<Drug> drugsByActiveIngredient = Drug.findByActiveIngredient(key);
 
-		return ok(search.render(drugsByName, drugsByActiveIngredient));
+		return ok(search.render(loggedUser,drugsByName, drugsByActiveIngredient));
 	}
 
 	/**
@@ -192,12 +203,6 @@ public class Drugs extends Controller {
 		if (!Security.isAuthenticated(userId)) {
 			return redirect(routes.Application.login());
 		}
-		
-		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
-			return redirect(routes.Application.login());
-		}
-
 
 		Drug drug = Drug.findById(id);
 		Drug.sellDrug(drug);

@@ -10,3 +10,101 @@ insert into drug (id, name, quantity, price, description, active_ingredient, is_
 org.h2.jdbc.JdbcSQLException: Hodnota je príliš dlhá pre stĺpec "DESCRIPTION VARCHAR(255)": "STRINGDECODE('Liek Ibalgin 400 sa u\u017e\u00edva pri miernej a\u017e strednej bolesti, napr. pri bolesti hlavy, zubov, chrbta, ... (616)"
 Value too long for column "DESCRIPTION VARCHAR(255)": "STRINGDECODE('Liek Ibalgin 400 sa u\u017e\u00edva pri miernej a\u017e strednej bolesti, napr. pri bolesti hlavy, zubov, chrbta, ... (616)"; SQL statement:
 insert into drug (id, name, quantity, price, description, active_ingredient, is_prescribed, user_id) values (?,?,?,?,?,?,?,?) [22001-168]
+04-28 16:55:27 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Stĺpec "MISSING" nenájdený
+Column "MISSING" not found; SQL statement:
+select t0.id c0, t0.name c1, t0.quantity c2, t0.price c3, t0.description c4, t0.active_ingredient c5, t0.is_prescribed c6, t0.user_id c7 
+from drug t0 
+where t0.quantity <= ?  and missing >= ?  [42122-168]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:138)
+	at org.h2.expression.Comparison.optimize(Comparison.java:159)
+	at org.h2.expression.ConditionAndOr.optimize(ConditionAndOr.java:127)
+	at org.h2.command.dml.Select.prepare(Select.java:802)
+	at org.h2.command.Parser.prepareCommand(Parser.java:218)
+	at org.h2.engine.Session.prepareLocal(Session.java:415)
+	at org.h2.engine.Session.prepareCommand(Session.java:364)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1109)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:74)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:264)
+	at com.jolbox.bonecp.ConnectionHandle.prepareStatement(ConnectionHandle.java:820)
+	at com.avaje.ebeaninternal.server.query.CQuery.prepareBindExecuteQuery(CQuery.java:365)
+	at com.avaje.ebeaninternal.server.query.CQueryEngine.findMany(CQueryEngine.java:174)
+	at com.avaje.ebeaninternal.server.query.DefaultOrmQueryEngine.findMany(DefaultOrmQueryEngine.java:77)
+	at com.avaje.ebeaninternal.server.core.OrmQueryRequest.findList(OrmQueryRequest.java:272)
+	at com.avaje.ebeaninternal.server.core.DefaultServer.findList(DefaultServer.java:1502)
+	at com.avaje.ebeaninternal.server.querydefn.DefaultOrmQuery.findList(DefaultOrmQuery.java:904)
+	at com.avaje.ebeaninternal.util.DefaultExpressionList.findList(DefaultExpressionList.java:177)
+	at models.Drug.findMissingDrugs(Drug.java:54)
+	at controllers.Application.home(Application.java:90)
+	at Routes$$anonfun$routes$1$$anonfun$applyOrElse$8$$anonfun$apply$8.apply(routes_routing.scala:173)
+	at Routes$$anonfun$routes$1$$anonfun$applyOrElse$8$$anonfun$apply$8.apply(routes_routing.scala:173)
+	at play.core.Router$HandlerInvoker$$anon$6$$anon$2.invocation(Router.scala:164)
+	at play.core.Router$Routes$$anon$1.invocation(Router.scala:345)
+	at play.core.j.JavaAction$$anon$1.call(JavaAction.scala:31)
+	at play.core.j.JavaAction$$anon$2.apply(JavaAction.scala:74)
+	at play.core.j.JavaAction$$anon$2.apply(JavaAction.scala:73)
+	at play.libs.F$Promise$PromiseActor.onReceive(F.java:420)
+	at akka.actor.UntypedActor$$anonfun$receive$1.applyOrElse(UntypedActor.scala:159)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:425)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:386)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:230)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:212)
+	at akka.dispatch.ForkJoinExecutorConfigurator$MailboxExecutionTask.exec(AbstractDispatcher.scala:502)
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:262)
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:975)
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1478)
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:104)
+04-28 16:57:35 jdbc[8]: exception
+org.h2.jdbc.JdbcSQLException: Stĺpec "MISSING" nenájdený
+Column "MISSING" not found; SQL statement:
+select t0.id c0, t0.name c1, t0.quantity c2, t0.price c3, t0.description c4, t0.active_ingredient c5, t0.is_prescribed c6, t0.user_id c7 
+from drug t0 
+where t0.quantity <= ?  and missing >= ?  [42122-168]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:329)
+	at org.h2.message.DbException.get(DbException.java:169)
+	at org.h2.message.DbException.get(DbException.java:146)
+	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:138)
+	at org.h2.expression.Comparison.optimize(Comparison.java:159)
+	at org.h2.expression.ConditionAndOr.optimize(ConditionAndOr.java:127)
+	at org.h2.command.dml.Select.prepare(Select.java:802)
+	at org.h2.command.Parser.prepareCommand(Parser.java:218)
+	at org.h2.engine.Session.prepareLocal(Session.java:415)
+	at org.h2.engine.Session.prepareCommand(Session.java:364)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1109)
+	at org.h2.jdbc.JdbcPreparedStatement.<init>(JdbcPreparedStatement.java:74)
+	at org.h2.jdbc.JdbcConnection.prepareStatement(JdbcConnection.java:264)
+	at com.jolbox.bonecp.ConnectionHandle.prepareStatement(ConnectionHandle.java:820)
+	at com.avaje.ebeaninternal.server.query.CQuery.prepareBindExecuteQuery(CQuery.java:365)
+	at com.avaje.ebeaninternal.server.query.CQueryEngine.findMany(CQueryEngine.java:174)
+	at com.avaje.ebeaninternal.server.query.DefaultOrmQueryEngine.findMany(DefaultOrmQueryEngine.java:77)
+	at com.avaje.ebeaninternal.server.core.OrmQueryRequest.findList(OrmQueryRequest.java:272)
+	at com.avaje.ebeaninternal.server.core.DefaultServer.findList(DefaultServer.java:1502)
+	at com.avaje.ebeaninternal.server.querydefn.DefaultOrmQuery.findList(DefaultOrmQuery.java:904)
+	at com.avaje.ebeaninternal.util.DefaultExpressionList.findList(DefaultExpressionList.java:177)
+	at models.Drug.findMissingDrugs(Drug.java:54)
+	at controllers.Application.home(Application.java:90)
+	at Routes$$anonfun$routes$1$$anonfun$applyOrElse$8$$anonfun$apply$8.apply(routes_routing.scala:173)
+	at Routes$$anonfun$routes$1$$anonfun$applyOrElse$8$$anonfun$apply$8.apply(routes_routing.scala:173)
+	at play.core.Router$HandlerInvoker$$anon$6$$anon$2.invocation(Router.scala:164)
+	at play.core.Router$Routes$$anon$1.invocation(Router.scala:345)
+	at play.core.j.JavaAction$$anon$1.call(JavaAction.scala:31)
+	at play.core.j.JavaAction$$anon$2.apply(JavaAction.scala:74)
+	at play.core.j.JavaAction$$anon$2.apply(JavaAction.scala:73)
+	at play.libs.F$Promise$PromiseActor.onReceive(F.java:420)
+	at akka.actor.UntypedActor$$anonfun$receive$1.applyOrElse(UntypedActor.scala:159)
+	at akka.actor.ActorCell.receiveMessage(ActorCell.scala:425)
+	at akka.actor.ActorCell.invoke(ActorCell.scala:386)
+	at akka.dispatch.Mailbox.processMailbox(Mailbox.scala:230)
+	at akka.dispatch.Mailbox.run(Mailbox.scala:212)
+	at akka.dispatch.ForkJoinExecutorConfigurator$MailboxExecutionTask.exec(AbstractDispatcher.scala:502)
+	at scala.concurrent.forkjoin.ForkJoinTask.doExec(ForkJoinTask.java:262)
+	at scala.concurrent.forkjoin.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:975)
+	at scala.concurrent.forkjoin.ForkJoinPool.runWorker(ForkJoinPool.java:1478)
+	at scala.concurrent.forkjoin.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:104)
+04-28 18:16:12 jdbc[2]: exception
+org.h2.jdbc.JdbcSQLException: Tabuľka "PLAY_EVOLUTIONS" nenájdená
+Table "PLAY_EVOLUTIONS" not found; SQL statement:
+select id, hash, apply_script, revert_script, state, last_problem from play_evolutions where state like 'applying_%' [42102-168]

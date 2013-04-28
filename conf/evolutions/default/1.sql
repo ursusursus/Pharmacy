@@ -13,6 +13,7 @@ create table drug (
   id                        bigint not null,
   name                      varchar(255),
   quantity                  integer,
+  missing                   integer,
   price                     varchar(255),
   description               LONGTEXT,
   active_ingredient         varchar(255),

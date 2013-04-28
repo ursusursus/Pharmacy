@@ -16,19 +16,22 @@ public class Drug extends Model {
 	@Id
 	public Long id;
 
-	@Required
+	//@Required
 	public String name;
 	
-	@Required
+	//@Required
 	public Integer quantity;
+
+	//@Required
+	public Integer missing;
 	
-	@Required
+	//@Required
 	public String price;
 	
 	@Column(columnDefinition="LONGTEXT")
 	public String description;
 	
-	@Required
+	//@Required
 	public String activeIngredient;
 	
 	public Integer isPrescribed;
@@ -54,13 +57,17 @@ public class Drug extends Model {
 		return find.where().le("quantity", 0).findList();
 	}
 	
+	public static List<Drug> findOrderingDrugs() {
+		return find.where().ge("missing", 1).findList();
+	}
+	
 	public static List<Drug> findByName(String name) {
 		return find.where().icontains("name", name).findList(); 
 	}
 	
 	public static void addDrug(Drug drug) {
 		drug.save();
-	}
+	}	
 	
 	public static void updateDrug(Drug drug, Long id) {
 		drug.update(id);

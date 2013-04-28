@@ -23,6 +23,8 @@ POST	/drugs/:id/update			controllers.Drugs.update(id: Long)
 GET		/drugs/:id/delete			controllers.Drugs.delete(id: Long)
 GET		/drugs/:id/sell				controllers.Drugs.sell(id: Long)
 GET		/drugs/:id					controllers.Drugs.show(id: Long)
+GET		/drugs/:id/order			controllers.Drugs.order(id: Long)
+POST	/drugs/:id/makeOrder		controllers.Drugs.makeOrder(id: Long)
 
 
 # Map static resources from the /public folder to the /assets URL path

@@ -15,14 +15,14 @@ public class User extends Model {
 	@Id
 	public Long id;
 
-	@Required
+	//@Required
 	public String email;
 
 	// tu ak dam @Required tak sa nemozem prihlasit lebo 
 	// asi ocakava aby tam bolo aj meno
 	public String name;
 
-	@Required
+	//@Required
 	public String password;
 	
 	// to iste

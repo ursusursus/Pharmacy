@@ -1,22 +1,35 @@
-@(missingDrugs: List[Drug])
+@(user:User, missingDrugs: List[Drug])
 @main("Pharmacy | Order") {
 
-	<h1>Pharmacy</h1>
-	<h2>Order</h2>
+	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li><a href="#">@user.name (@user.role)  |</a></li> 
+			<li class="active"><a href="@routes.Application.logout()">Logout</a></li>	
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
 	
 	@if(missingDrugs.size() <= 0) {
 		<p>No missing drugs to order :)</p>
 	} else {
 		<h2>Sending order for these drugs</h2>
 		<ol>
-			@for(drug <- missingDrugs) {
-				<li>
-					<p>Name: @drug.name</p>
-					<p>Description: @drug.description</p>
-				</li>
-			}
+		@for(drug <- missingDrugs) {
+			<li>
+			<p>Name: @drug.name</p>
+			<p>To order: @drug.missing</p>
+			</li>
+		}
 		</ol>
 	}
+	
+	<hr>
+		
+	<div class="footer">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>	
     
     
 }

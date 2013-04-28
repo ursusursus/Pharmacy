@@ -1,18 +1,37 @@
-@(taskForm: Form[Drug])
+@(user:User, taskForm: Form[Drug])
 @import helper._
 @main("Add new drug") {
 
-	<h2>Add drug</h2>
-	@form(routes.Drugs.save()) {
-        @inputText(taskForm("name"))
-        @textarea(taskForm("description"))
-        @select(taskForm("isPrescribed"), options("1" -> "Yes", "0" -> "No"))
-        @inputText(taskForm("quantity"), 'type -> "number")
-        @inputText(taskForm("price"))
-        @inputText(taskForm("activeIngredient"))
-        <input type="submit" value="Create">
+	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li><a href="#">@user.name (@user.role)  |</a></li> 
+			<li class="active"><a href="@routes.Application.logout()">Logout</a></li>	
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
+	
+	@form(routes.Drugs.save, 'class ->"form-signin") {
+		<h2 class="form-signin-heading">Edit drug</h2>  
+        @inputText(taskForm("name"), '_label ->"Name:")
+        @textarea(taskForm("description"), '_label ->"Description:")
+        @select(taskForm("isPrescribed"), options("0" -> "No", "1" -> "Yes"), '_label ->"Is Prescribed:")
+        @inputText(taskForm("quantity"), 'type -> "number", '_label ->"Quantity:")
+        @inputText(taskForm("price"), '_label ->"Price:")
+        @inputText(taskForm("activeIngredient"), '_label ->"Active Ingredients:")
+        <div class="form-actions">
+			<button class="btn btn-large btn-primary" type="submit">Create</button>
+		</div>
         
     }
+    
+    
+	<hr>
+		
+	<div class="footer">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>	
     
     
 }
