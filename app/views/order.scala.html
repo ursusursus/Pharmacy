@@ -12,9 +12,9 @@
 	<hr>
 	
 	@if(missingDrugs.size() <= 0) {
-		<p>No missing drugs to order :)</p>
+		<h3>No missing drugs to order</h3>
 	} else {
-		<h2>Sending order for these drugs</h2>
+		<h3>Sending order for these drugs</h3>
 		<ol>
 		@for(drug <- missingDrugs) {
 			<li>
@@ -27,7 +27,7 @@
 	
 	<hr>
 		
-	<div class="footer">
+	<div class="footer" align="center">
 		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
 	</div>	
     
