@@ -1,0 +1,41 @@
+@(user:User, id: Long, orderDrugForm: Form[Drug])
+@import helper._
+@main("Order drug") {
+
+	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li><a href="#">@user.name (@user.role)  |</a></li> 
+			<li class="active"><a href="@routes.Application.logout()">Logout</a></li>	
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
+	
+	@form(routes.Drugs.makeOrder(id), 'class ->"form-signin") {
+		<h2 class="form-signin-heading">Order drug</h2>  
+        @inputText(orderDrugForm("name"), '_label ->"Name:")
+        @inputText(orderDrugForm("missing"), 'type -> "number", '_label ->"Quantity:")
+        
+        <div style="display:none">
+        	@inputText(orderDrugForm("quantity"), 'type -> "number", '_label ->"Quantity:")
+	        @textarea(orderDrugForm("description"), '_label ->"Description:")
+	        @select(orderDrugForm("isPrescribed"), options("0" -> "No", "1" -> "Yes"), '_label ->"Is Prescribed:")        
+	        @inputText(orderDrugForm("price"), '_label ->"Price:")
+	        @inputText(orderDrugForm("activeIngredient"), '_label ->"Active Ingredients:")
+        </div>
+        <div class="form-actions">
+			<button class="btn btn-large btn-primary" type="submit">Order</button>
+		</div>
+        
+    }
+    
+    
+	<hr>
+		
+	<div class="footer">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>	
+    
+    
+}
