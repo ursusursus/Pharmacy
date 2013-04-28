@@ -211,28 +211,4 @@ public class Drugs extends Controller {
 		return redirect(routes.Application.home());
 	}
 
-
-	/**
-	 * 
-	 * @param form
-	 * @return
-	 */
-	private static <T extends Model> boolean isValid(Form<T> form) {
-		if (form.hasErrors()) {
-			for (String key : form.errors().keySet()) {
-				List<ValidationError> currentError = form.errors().get(key);
-				for (ValidationError error : currentError) {
-					// flash(key, error.message());
-					print(key + " - " + error.message());
-				}
-			}
-			return false;
-		}
-		return true;
-	}
-
-	private static void print(String message) {
-		System.out.println(message);
-	}
-
 }

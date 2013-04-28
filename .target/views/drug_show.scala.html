@@ -1,13 +1,43 @@
-@(drug: Drug) 
+@(user:User, drug: Drug)
 @main("Add new drug") {
 
-	<h1>@drug.name</h1>
+	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li><a href="#">@user.name (@user.role)  |</a></li> 
+			<li class="active"><a href="@routes.Application.logout()">Logout</a></li>	
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
 	
-	<p>Id: @drug.id</p>
-	<p>Description: @drug.description</p>
-	<p>Active ingredient: @drug.activeIngredient</p>
-	<p>Price: @drug.price</p>
-	<p>Quantity: @drug.quantity</p>
-	<p>Is prescribed: @drug.isPrescribed</p>
+	<li>
+		<p><b>Name:</b> @drug.name</p>
+		<p><b>Description:</b> @drug.description</p>
+		<p><b>Active ingredients:</b> @drug.activeIngredient</p>
+		<p><b>Price:</b> @drug.price €</p>
+		<p><b>Quantity:</b> @drug.quantity</p>
+		<p><b>Is prescribed:</b> @if(drug.isPrescribed==0){no}else{yes}</p>
+	</li>
+	
+	<p>
+		<ul class="nav nav-pills">
+			@if(user.role == "warehouseman"){						
+				<li><a href="@routes.Drugs.delete(drug.id)">Delete</a></li> 
+				<li><a href="@routes.Drugs.edit(drug.id)">Edit</a></li> 
+				<li><a href="@routes.Drugs.order(drug.id)">Order</a></li> 
+			}
+			@if(user.role == "chemist"){			
+				<li><a href="@routes.Drugs.sell(drug.id)">Sell</a></li> 
+				<li><a href="@routes.Drugs.order(drug.id)">Order</a></li> 
+			}
+		</ul>				
+	</p>
+	
+	<hr>
+		
+	<div class="footer" align="center">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>	
 
 }

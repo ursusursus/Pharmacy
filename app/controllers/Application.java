@@ -22,7 +22,6 @@ public class Application extends Controller {
 	static Form<Drug> orderDrugForm = Form.form(Drug.class);
 
 	public static Result index() {
-		//session().clear();
 		return redirect(routes.Application.home());
 	}
 
@@ -44,10 +43,6 @@ public class Application extends Controller {
 
 	public static Result createUser() {
 		Form<User> filledForm = userForm.bindFromRequest();
-		if (!isValid(filledForm)) {
-			return redirect(routes.Application.register());
-		}
-
 		User user = filledForm.get();
 		user.save();
 
@@ -79,7 +74,6 @@ public class Application extends Controller {
 	
 
 	public static Result home() {
-		//session().clear();
 		String userId = session("user_id");
 		if (userId == null) {
 			System.out.println("You need to login first");
@@ -104,7 +98,7 @@ public class Application extends Controller {
 
 		// Is authorized?
 		String userRole = session("user_role");
-		if (!Security.isAuthorized(Arrays.asList(Role.ADMIN, Role.WAREHOUSEMAN), userRole)) {
+		if (!Security.isAuthorized(Arrays.asList(Role.WAREHOUSEMAN), userRole)) {
 			System.out.println("Unauthorized access");
 			return redirect(routes.Application.login());
 		}
@@ -114,24 +108,6 @@ public class Application extends Controller {
 		User loggedUser = User.findById(Long.parseLong(userId));
 		
 		return ok(order.render(loggedUser,orderingDrugs));
-	}
-
-	private static <T extends Model> boolean isValid(Form<T> form) {
-		if (form.hasErrors()) {
-			for (String key : form.errors().keySet()) {
-				List<ValidationError> currentError = form.errors().get(key);
-				for (ValidationError error : currentError) {
-					// flash(key, error.message());
-					print(key + " - " + error.message());
-				}
-			}
-			return false;
-		}
-		return true;
-	}
-
-	private static void print(String message) {
-		System.out.println(message);
 	}
 
 }

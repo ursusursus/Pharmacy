@@ -3,12 +3,6 @@
 
 # --- !Ups
 
-create table active_ingredient (
-  id                        bigint not null,
-  name                      varchar(255),
-  constraint pk_active_ingredient primary key (id))
-;
-
 create table drug (
   id                        bigint not null,
   name                      varchar(255),
@@ -31,8 +25,6 @@ create table user (
   constraint pk_user primary key (id))
 ;
 
-create sequence active_ingredient_seq;
-
 create sequence drug_seq;
 
 create sequence user_seq;
@@ -46,15 +38,11 @@ create index ix_drug_user_1 on drug (user_id);
 
 SET REFERENTIAL_INTEGRITY FALSE;
 
-drop table if exists active_ingredient;
-
 drop table if exists drug;
 
 drop table if exists user;
 
 SET REFERENTIAL_INTEGRITY TRUE;
-
-drop sequence if exists active_ingredient_seq;
 
 drop sequence if exists drug_seq;
 

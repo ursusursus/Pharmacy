@@ -1,18 +1,37 @@
-@(id: Long, drugForm: Form[Drug])
+@(user:User, id: Long, drugForm: Form[Drug])
 @import helper._
 @main("Edit drug") {
 
-	<h2>Edit drug</h2>
-	@form(routes.Drugs.update(id)) {
-        @inputText(drugForm("name"))
-        @textarea(drugForm("description"))
-        @select(drugForm("isPrescribed"), options("1" -> "Yes", "0" -> "No"))
-        @inputText(drugForm("quantity"), 'type -> "number")
-        @inputText(drugForm("price"))
-        @inputText(drugForm("activeIngredient"))
-        <input type="submit" value="Save changes">
+	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li><a href="#">@user.name (@user.role)  |</a></li> 
+			<li class="active"><a href="@routes.Application.logout()">Logout</a></li>	
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
+	
+	@form(routes.Drugs.update(id), 'class ->"form-signin") {
+		<h2 class="form-signin-heading">Edit drug</h2>  
+        @inputText(drugForm("name"), '_label ->"Name:")
+        @textarea(drugForm("description"), '_label ->"Description:")
+        @select(drugForm("isPrescribed"), options("0" -> "No", "1" -> "Yes"), '_label ->"Is Prescribed:")
+        @inputText(drugForm("quantity"), 'type -> "number", '_label ->"Quantity:")
+        @inputText(drugForm("price"), '_label ->"Price:")
+        @inputText(drugForm("activeIngredient"), '_label ->"Active Ingredients:")
+        <div class="form-actions">
+			<button class="btn btn-large btn-primary" type="submit">Save changes</button>
+		</div>
         
     }
+    
+    
+	<hr>
+		
+	<div class="footer" align="center">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>	
     
     
 }

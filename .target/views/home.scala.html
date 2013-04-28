@@ -2,35 +2,40 @@
 @import helper._
 @main("Pharmacy | Home") {
 	
-	<h1>Pharmacy</h1>
-	<p>
-		Hello, @user.name! (@user.role) | 
-		<a href="@routes.Application.logout()">Logout</a>
-	</p>
-    
-	<h1>Drugs</h1>
+	<div class="masthead">
+		<ul class="nav nav-pills pull-right">
+			<li><a href="#">@user.name (@user.role)  |</a></li> 
+			<li class="active"><a href="@routes.Application.logout()">Logout</a></li>	
+		</ul>
+		<a href="@routes.Application.home()"><h3 class="muted">Pharmacy</h3></a>
+	</div>
+
+	<hr>
+	    
 	@if(flash.contains("success")) {
-		<p class="success">
-			@flash.get("success")
-		</p>
+		<div class="alert alert-success">
+			<strong>@flash.get("success")</strong>	
+		</div>
 	}
 	
-	@if(flash.contains("error")) {
-		<p class="error">
-			@flash.get("error")
-		</p>
+	@if(flash.contains("error")) {            
+		<div class="alert alert-error">
+            	<strong>@flash.get("error")</strong>			
+		</div>
 	}
 	
-    <p><a href="@routes.Drugs.create()">Add new drug</a></p>
-    <p><a href="@routes.Application.orderMissingDrugs()">Order missing drugs</a></p>
+	@if(user.role == "warehouseman"){
+	    <p><a href="@routes.Drugs.create()">Add new drug</a></p>
+	    <p><a href="@routes.Application.orderMissingDrugs()">Order missing drugs</a></p>
+    }
     
-    <h2>Search</h2>
+    <h3>Search</h3>
     <form method="POST" action="@routes.Drugs.search()" >
-        <input type="text" name="key" placeholder="Enter name or ingredient" />
-        <input type="submit" value="Search" />
+        <input type="text" name="key" placeholder="Enter name or ingredient" class = "input-level" style="vertical-align:top"/>
+        <button class="btn btn-primary" type="submit">Search</button>
     </form>
     
-    <h2>All drugs</h2>
+    <h3>All drugs</h3>
     @if(allDrugs.size() <= 0) {
 		<p>No drugs</p>
 	} else {
@@ -38,40 +43,59 @@
 			@for(drug <- allDrugs) {
 				<li>
 					<a href="@routes.Drugs.show(drug.id)"><p>Name: @drug.name</p></a>
-					<p>Id: @drug.id</p>
-					<p>Description: @drug.description</p>
-					<p>Active ingredient: @drug.activeIngredient</p>
-					<p>Price: @drug.price</p>
-					<p>Quantity: @drug.quantity</p>
-					<p>Is prescribed: @drug.isPrescribed</p>
+					<p><b>Description:</b> @drug.description</p>
+					<p><b>Active ingredients:</b> @drug.activeIngredient</p>
+					<p><b>Price:</b> @drug.price €</p>
+					<p><b>Quantity:</b> @drug.quantity</p>
+					<p><b>Is prescribed:</b> @if(drug.isPrescribed==0){no}else{yes}</p>
 				</li>
 				<p>
-					<a href="@routes.Drugs.delete(drug.id)">Delete</a>
-					<a href="@routes.Drugs.edit(drug.id)">Edit</a>
-					<a href="@routes.Drugs.sell(drug.id)">Sell</a>
+					<ul class="nav nav-pills">
+						@if(user.role == "warehouseman"){						
+							<li><a href="@routes.Drugs.delete(drug.id)">Delete</a></li> 
+							<li><a href="@routes.Drugs.edit(drug.id)">Edit</a></li> 
+							<li><a href="@routes.Drugs.order(drug.id)">Order</a></li> 
+						}
+						@if(user.role == "chemist"){			
+							<li><a href="@routes.Drugs.sell(drug.id)">Sell</a></li> 
+							<li><a href="@routes.Drugs.order(drug.id)">Order</a></li> 
+						}
+					</ul>				
 				</p>
 			}
 		</ol>
 	}
 	
-	<h2>Missing drugs</h2>
-	@if(missingDrugs.size() <= 0) {
-		<p>No missing drugs</p>
-	} else {
-		<ol>
-			@for(drug <- missingDrugs) {
-				<li>
-					<a href="@routes.Drugs.show(drug.id)"><p>Name: @drug.name</p></a>
-					<p>Id: @drug.id</p>
-					<p>Description: @drug.description</p>
-					<p>Active ingredient: @drug.activeIngredient</p>
-					<p>Price: @drug.price</p>
-					<p>Quantity: @drug.quantity</p>
-					<p>Is prescribed: @drug.isPrescribed</p>
-				</li>	
-			}
-		</ol>
+	@if(user.role == "warehouseman"){	
+	
+		@if(missingDrugs.size() <= 0) {
+		} else {
+			<h3>Missing drugs or drugs to order</h3>
+			<ol>
+				@for(drug <- missingDrugs) {
+					<li>
+						<a href="@routes.Drugs.show(drug.id)"><p>Name: @drug.name</p></a>
+						<p><b>Description:</b> @drug.description</p>
+						<p><b>Active ingredients:</b> @drug.activeIngredient</p>
+						<p><b>Price:</b> @drug.price €</p>
+						<p><b>Quantity:</b> @drug.quantity</p>
+						<p><b>To order:</b> @drug.missing</p>
+						<p><b>Is prescribed:</b> @if(drug.isPrescribed==0){no}else{yes}</p>
+					</li>				
+					<p>
+						<ul class="nav nav-pills">
+							<li><a href="@routes.Drugs.order(drug.id)">Order</a></li> 
+						</ul>				
+					</p>
+				}
+			</ol>
+		}
 	}
 	
-    
+	<hr>
+		
+	<div class="footer" align="center">
+		<p>Vlastimil Brečka, Matúš Ferko, Jozef Ferko, Vladimír Černega &copy; 2013</p>
+	</div>
+	
 }
